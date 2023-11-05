@@ -51,7 +51,8 @@ class SetupCamerasOperator(bpy.types.Operator):
                 camera.rotation_euler[2] += math.pi
 
                 # Set the camera name
-                camera.name = f'360_Camera_{i + 1}'
+                camera.name = f'360_camera_{i:02d}'  # Format "360_camera_00, 360_camera_01, 360_camera_02, ..."
+
         else:
             self.report({'ERROR'}, f"The object '{empty_name}' was not found in the scene.")
 
@@ -69,7 +70,7 @@ class ResetCamerasOperator(bpy.types.Operator):
                 bpy.data.objects.remove(obj, do_unlink=True)
 
         # Remove cameras from the Blender file 
-        for data_camera in bpy.data.cameras:
-            bpy.data.cameras.remove(data_camera)
+        # for data_camera in bpy.data.cameras:
+        #     bpy.data.cameras.remove(data_camera)
 
         return {'FINISHED'}

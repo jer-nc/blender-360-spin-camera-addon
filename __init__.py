@@ -7,14 +7,13 @@ bl_info = {
 import bpy
 from .gui import CameraSetupPanel
 from .camera_setup import SetupCamerasOperator, ResetCamerasOperator
-from .render import Render360CamerasOperator, RenderAll360CamerasOperator
+from .render import  RenderAll360CamerasOperator
 
 # Register and unregister the classes
 def register():
     bpy.utils.register_class(CameraSetupPanel)
     bpy.utils.register_class(SetupCamerasOperator)
     bpy.utils.register_class(ResetCamerasOperator)
-    bpy.utils.register_class(Render360CamerasOperator)
     bpy.utils.register_class(RenderAll360CamerasOperator)
 
     
@@ -22,7 +21,6 @@ def unregister():
     bpy.utils.unregister_class(CameraSetupPanel)
     bpy.utils.unregister_class(SetupCamerasOperator)
     bpy.utils.unregister_class(ResetCamerasOperator)
-    bpy.utils.unregister_class(Render360CamerasOperator)
     bpy.utils.unregister_class(RenderAll360CamerasOperator)
 
 

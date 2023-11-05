@@ -32,7 +32,7 @@ class CameraSetupPanel(bpy.types.Panel):
     )
 
     bpy.types.Scene.render_output_path = bpy.props.StringProperty(
-        name="Render Output Path",
+        name="",
         default="",
         subtype='DIR_PATH',
     )
@@ -41,10 +41,13 @@ class CameraSetupPanel(bpy.types.Panel):
         layout = self.layout
         scene = context.scene
 
+        # Camera setup
         layout.label(text="Camera Setup:")
         layout.prop(scene, "num_cameras")
+        # Camera radius
         layout.prop(scene, "radius")
         layout.separator()
+        # Empty position
         layout.label(text="Empty Position:")
 
         box = layout.box()
@@ -59,8 +62,14 @@ class CameraSetupPanel(bpy.types.Panel):
         row.label(text="Z")
         row.prop(scene, "empty_position", index=2, text="")
         layout.separator()
+        # Cameras setup Button
         layout.operator("addon.setup_cameras")
+        # Reset Cameras Button
         layout.operator("addon.reset_cameras")
+        layout.separator()
+        # Render Output Path
         layout.label(text="Render Output Path:")
         layout.prop(context.scene, "render_output_path")
+        layout.separator()
+        # Render All Cameras Button
         layout.operator("addon.render_all_360_cameras")

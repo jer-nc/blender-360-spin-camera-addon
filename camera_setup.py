@@ -3,74 +3,74 @@ import math
 
 
 
-# Definir una clase para el operador de configuración de cámaras
+# Define a class for the camera setup operator
 class SetupCamerasOperator(bpy.types.Operator):
     bl_idname = "addon.setup_cameras"
-    bl_label = "Configurar Cámaras"
+    bl_label = "Setup Cameras"
 
     def execute(self, context):
-        # Obtener las propiedades configuradas desde la GUI
+        # Get the user-configured properties from the GUI
         num_cameras = context.scene.num_cameras
         radius = context.scene.radius
         empty_position = context.scene.empty_position
 
-        # Nombre único para el objeto empty
+        # Unique name for the empty object
         empty_name = '360_Empty'
 
-        # Verificar si el objeto empty ya existe en la escena
+        # Check if the empty object already exists in the scene
         if empty_name not in bpy.data.objects:
-            # Crear el objeto empty si no existe
+            # Create the empty object if it doesn't exist
             bpy.ops.object.empty_add(location=empty_position)
             bpy.context.object.name = empty_name
 
-        # Obtener el objeto empty como objetivo
+        # Get the empty object as the target
         target_empty = bpy.data.objects.get(empty_name)
 
         if target_empty is not None:
-            # Eliminar cámaras anteriores en la escena que empiezan con "360_"
+            # Remove previous cameras in the scene starting with "360_"
             for obj in bpy.data.objects:
                 if obj.type == 'CAMERA' and obj.name.startswith('360_'):
                     bpy.data.objects.remove(obj, do_unlink=True)
 
-            # Crear las cámaras nuevamente sin eliminar las existentes
+            # Create cameras again without removing existing ones
             for i in range(num_cameras):
-                # Calcular la posición de la cámara
+                # Calculate the camera position
                 angle = (2 * math.pi / num_cameras) * i
                 x = radius * math.cos(angle) + target_empty.location.x
                 y = radius * math.sin(angle) + target_empty.location.y
                 z = target_empty.location.z
 
-                # Crear una nueva cámara
+                # Create a new camera
                 bpy.ops.object.camera_add(location=(x, y, z))
                 camera = bpy.context.object
 
-                # Calcular la dirección hacia el empty
+                # Calculate the direction towards the empty
                 direction = target_empty.location - camera.location
                 rot_quat = direction.to_track_quat('Z', 'Y')
                 camera.rotation_euler = rot_quat.to_euler()
 
-                # Girar la cámara 180 grados para que mire hacia el empty
+                # Rotate the camera 180 degrees to point at the empty
                 camera.rotation_euler[2] += math.pi
 
-                # Establecer el nombre de la cámara
+                # Set the camera name
                 camera.name = f'360_Camera_{i + 1}'
         else:
-            self.report({'ERROR'}, f"El objeto '{empty_name}' no se encontró en la escena.")
+            self.report({'ERROR'}, f"The object '{empty_name}' was not found in the scene.")
 
         return {'FINISHED'}
 
-# Definir una clase para el operador de reseteo
+# Define a class for the reset operator
 class ResetCamerasOperator(bpy.types.Operator):
     bl_idname = "addon.reset_cameras"
-    bl_label = "Resetear Cámaras"
+    bl_label = "Reset Cameras"
 
     def execute(self, context):
-        # Eliminar cámaras existentes en la escena que empiezan con "360_"
+        # Remove existing cameras in the scene starting with "360_"
         for obj in bpy.data.objects:
             if obj.type == 'CAMERA' and obj.name.startswith('360_'):
                 bpy.data.objects.remove(obj, do_unlink=True)
 
-        # Eliminar cámaras del archivo de Blender 
+        # Remove cameras from the Blender file 
         for data_camera in bpy.data.cameras:
             bpy.data.cameras.remove(data_camera)
 

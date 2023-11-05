@@ -9,9 +9,7 @@ from .gui import CameraSetupPanel
 from .camera_setup import SetupCamerasOperator, ResetCamerasOperator
 from .render import Render360CamerasOperator, RenderAll360CamerasOperator
 
-
-
-# Registrar las clases
+# Register and unregister the classes
 def register():
     bpy.utils.register_class(CameraSetupPanel)
     bpy.utils.register_class(SetupCamerasOperator)

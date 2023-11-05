@@ -1,8 +1,6 @@
 import bpy
 import math
 
-
-
 # Define a class for the camera setup operator
 class SetupCamerasOperator(bpy.types.Operator):
     bl_idname = "addon.setup_cameras"

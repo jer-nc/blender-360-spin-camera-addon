@@ -1,13 +1,12 @@
 import bpy
 
-
-# Definir una función de actualización para la propiedad empty_position
+# Define an update function for the empty_position property
 def update_empty_position(self, context):
     empty = bpy.data.objects.get('360_Empty')
     if empty:
         empty.location = self.empty_position
 
-# Definir una clase para la GUI del addon
+# Define a class for the addon GUI
 class CameraSetupPanel(bpy.types.Panel):
     bl_label = "360 Cameras"
     bl_idname = "PT_CameraSetup"
@@ -15,25 +14,25 @@ class CameraSetupPanel(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "360 Cameras"
 
-    # Definir las propiedades personalizadas
+    # Define custom properties
     bpy.types.Scene.num_cameras = bpy.props.IntProperty(
-        name="Número de Cámaras",
+        name="Number of Cameras",
         default=24,
         min=1
     )
     bpy.types.Scene.radius = bpy.props.FloatProperty(
-        name="Radio",
+        name="Radius",
         default=10.0,
         min=0.1
     )
     bpy.types.Scene.empty_position = bpy.props.FloatVectorProperty(
-        name="Posición del Empty",
+        name="Empty Position",
         default=(0, 0, 0),
         update=update_empty_position
     )
 
     bpy.types.Scene.render_output_path = bpy.props.StringProperty(
-        name="Ruta de salida del render",
+        name="",
         default="",
         subtype='DIR_PATH',
     )
@@ -42,11 +41,14 @@ class CameraSetupPanel(bpy.types.Panel):
         layout = self.layout
         scene = context.scene
 
-        layout.label(text="Configuración de Cámaras:")
+        # Camera setup
+        layout.label(text="Camera Setup:")
         layout.prop(scene, "num_cameras")
+        # Camera radius
         layout.prop(scene, "radius")
         layout.separator()
-        layout.label(text="Posición del Empty:")
+        # Empty position
+        layout.label(text="Empty Position:")
 
         box = layout.box()
         col = box.column(align=True)
@@ -60,8 +62,14 @@ class CameraSetupPanel(bpy.types.Panel):
         row.label(text="Z")
         row.prop(scene, "empty_position", index=2, text="")
         layout.separator()
+        # Cameras setup Button
         layout.operator("addon.setup_cameras")
+        # Reset Cameras Button
         layout.operator("addon.reset_cameras")
-        layout.label(text="Ruta de salida del render:")
+        layout.separator()
+        # Render Output Path
+        layout.label(text="Render Output Path:")
         layout.prop(context.scene, "render_output_path")
+        layout.separator()
+        # Render All Cameras Button
         layout.operator("addon.render_all_360_cameras")

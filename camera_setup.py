@@ -25,6 +25,12 @@ class SetupCamerasOperator(bpy.types.Operator):
         target_empty = bpy.data.objects.get(empty_name)
 
         if target_empty is not None:
+            # Store the current camera rotations
+            camera_rotations = []
+            for obj in bpy.data.objects:
+                if obj.type == 'CAMERA' and obj.name.startswith('360_'):
+                    camera_rotations.append(obj.rotation_euler.copy())
+
             # Remove previous cameras in the scene starting with "360_"
             for obj in bpy.data.objects:
                 if obj.type == 'CAMERA' and obj.name.startswith('360_'):
@@ -33,7 +39,7 @@ class SetupCamerasOperator(bpy.types.Operator):
             # Create cameras again without removing existing ones
             for i in range(num_cameras):
                 # Calculate the camera position
-                angle = (2 * math.pi / num_cameras) * i
+                angle = (2 * math.pi / num_cameras) * i + 0.000001  
                 x = radius * math.cos(angle) + target_empty.location.x
                 y = radius * math.sin(angle) + target_empty.location.y
                 z = target_empty.location.z
@@ -49,6 +55,10 @@ class SetupCamerasOperator(bpy.types.Operator):
 
                 # Rotate the camera 180 degrees to point at the empty
                 camera.rotation_euler[2] += math.pi
+
+                # Restore the camera rotation
+                if i < len(camera_rotations) and len(camera_rotations) == num_cameras:
+                    camera.rotation_euler = camera_rotations[i]
 
                 # Set the camera name
                 camera.name = f'360_camera_{i:02d}'  # Format "360_camera_00, 360_camera_01, 360_camera_02, ..."

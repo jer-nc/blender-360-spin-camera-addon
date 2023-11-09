@@ -71,7 +71,7 @@ class SetupCamerasOperator(bpy.types.Operator):
 # Define a class for the reset operator
 class ResetCamerasOperator(bpy.types.Operator):
     bl_idname = "addon.reset_cameras"
-    bl_label = "Reset Cameras"
+    bl_label = "Remove Cameras"
 
     def execute(self, context):
         # Remove existing cameras in the scene starting with "360_"

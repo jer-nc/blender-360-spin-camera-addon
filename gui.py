@@ -9,15 +9,9 @@ def update_empty_position(self, context):
         empty.location = self.empty_position
 
 
-# def update_camera_rotation_x(self, context):
-#     for obj in bpy.data.objects:
-#         if obj.type == 'CAMERA' and obj.name.startswith('360_'):
-#             obj.rotation_euler.x = self.camera_rotation_x
-
 def update_camera_rotation_x(self, context):
     for obj in bpy.data.objects:
         if obj.type == 'CAMERA' and obj.name.startswith('360_'):
-            # Convert degrees to radians
             obj.rotation_euler.x = math.radians(self.camera_rotation_x)
 
 

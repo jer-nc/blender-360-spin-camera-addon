@@ -1,7 +1,10 @@
 bl_info = {
-    "name": "360 CAMERA ADDON",
-    "blender": (3, 6, 0),
-    "category": "Object",
+    "name": "360_CAMERA_ADDON",
+    "blender": (3, 6, 1),
+    "category": "User Interface",
+    "author": "Brender Labs",
+    "version": (0, 0, 1),
+    "description": "Add-on for 360 camera setup and rendering"
 }
 
 import bpy

@@ -9,10 +9,17 @@ def update_empty_position(self, context):
         empty.location = self.empty_position
 
 
+# def update_camera_rotation_x(self, context):
+#     for obj in bpy.data.objects:
+#         if obj.type == 'CAMERA' and obj.name.startswith('360_'):
+#             obj.rotation_euler.x = self.camera_rotation_x
+
 def update_camera_rotation_x(self, context):
     for obj in bpy.data.objects:
         if obj.type == 'CAMERA' and obj.name.startswith('360_'):
-            obj.rotation_euler.x = self.camera_rotation_x
+            # Convert degrees to radians
+            obj.rotation_euler.x = math.radians(self.camera_rotation_x)
+
 
 
 # Define a class for the addon GUI
@@ -47,10 +54,10 @@ class CameraSetupPanel(bpy.types.Panel):
     )
 
     bpy.types.Scene.camera_rotation_x = bpy.props.FloatProperty(
-        name="Camera X Rotation",
-        default=0.0,
+        name="",
+        default=90.0,
         min=0.0,
-        max=2 * math.pi,
+        max=360.0,
         update=update_camera_rotation_x
     )
 
